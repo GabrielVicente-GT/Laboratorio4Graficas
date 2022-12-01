@@ -24,25 +24,25 @@ vertices_sombreado = '''    #version 460
                                 ourColor = vertexColor;
                             }'''
 
-def calculateMatrix(angle):
+def calculateMatrix(Angulo_Rotacionb):
     i = glm.mat4(1)
-    translate = glm.translate(i, glm.vec3(0, 0, 0))
-    rotate = glm.rotate(i, glm.radians(angle), glm.vec3(0, 1, 0))
-    scale = glm.scale(i, glm.vec3(1, 1, 1))
-    model = translate * rotate * scale
+    rotacion_principal = glm.rotate(i, glm.radians(Angulo_Rotacionb), glm.vec3(0, 1, 0))
+    traslation = glm.translate(i, glm.vec3(0, 0, 0))
+    Escala_inicial = glm.scale(i, glm.vec3(1, 1, 1))
+    CamaraTotal = traslation * rotacion_principal * Escala_inicial
 
-    view = glm.lookAt(
+    VistalA = glm.lookAt(
         glm.vec3(0, 0, 15),
         glm.vec3(0, 1, 0),
         glm.vec3(0, 1, 0)
     )
-    projection = glm.perspective(
+    Proy_1 = glm.perspective(
         glm.radians(45),
         1600/1200,
         0.1,
         1000.0
     )
 
-    amatrix = projection * view * model
+    amatrix = Proy_1 * VistalA * CamaraTotal
 
     glUniformMatrix4fv(glGetUniformLocation(compileProgram(compileShader(fragmentacion_sombreado , GL_FRAGMENT_SHADER),compileShader(vertices_sombreado, GL_VERTEX_SHADER)), 'amatrix'),1,GL_FALSE,glm.value_ptr(amatrix))
